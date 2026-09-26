@@ -10,6 +10,8 @@ namespace SimpleStudentManagementSystem.Data
     {
         public DbSet<Student> students {  get; set; }
         public DbSet<Course> courses { get; set; }
+        public DbSet<Enrollment> Enrollments { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

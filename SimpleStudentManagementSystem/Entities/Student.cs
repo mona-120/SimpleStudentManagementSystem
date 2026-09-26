@@ -11,5 +11,7 @@ namespace SimpleStudentManagementSystem.Entities
         public string Email { get; set; }
         public DateOnly? DateOfBirth { get; set; }
         public DateOnly EnrollmentDate { get; set; } 
+
+        public List<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }

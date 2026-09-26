@@ -10,5 +10,8 @@ namespace SimpleStudentManagementSystem.Entities
         public string Title { get; set; }
         public int Credits { get; set; }
         public string Description { get; set; }
+
+        public List<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+        public List<CourseInstructor> instructors { get; set; } = new List<CourseInstructor>();
     }
 }
