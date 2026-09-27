@@ -56,10 +56,10 @@ namespace SimpleStudentManagementSystem.Services
             return new Result<Student>(true, $"Find student {student.FullName} with id {id}", student);
         }
 
-
+        
 
         // update student data
-        public async Task<Result<Student>> UpdateStudent(int  id, Student student)
+        public async Task<Result<Student>> UpdateStudent(int id, Student student)
         {
             Student? st = await context.Students.FindAsync(id);
             if (st == null)
