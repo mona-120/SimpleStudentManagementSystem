@@ -11,20 +11,22 @@ namespace SimpleStudentManagementSystem.Data.Configrations
     {
         public void Configure(EntityTypeBuilder<Enrollment> builder)
         {
-            builder.HasKey(e => new { e.StudentId, e.CourseId}); // composite key
+            builder.HasKey(e => new { e.StudentId, e.CourseId}); // composite key prevent student to enroll in the same course twice
             builder.Property(e => e.EnrollmentDate)
                 .HasDefaultValueSql("Cast (GetDate() As date)");
 
             builder.HasOne(e => e.course)
                 .WithMany(c => c.Enrollments)
                 .HasForeignKey(e => e.CourseId)
-                .IsRequired();   // total participation from enrollment where dependent(CourseID) can't exist without parent(course)
-            
+                .IsRequired()   // total participation from enrollment where dependent(CourseID) can't exist without parent(course)
+                .OnDelete(DeleteBehavior.Restrict); // can't dalete course enrollment if course deleted, as it may related with a student
+
             builder.HasOne(e => e.student)
                  .WithMany(s => s.Enrollments)
                  .HasForeignKey(e => e.StudentId)
-                 .IsRequired();
-
+                 .IsRequired()
+                 .OnDelete(DeleteBehavior.Cascade);
+            // Delete record for student enrollment if student removed from system
             // Default dalate is on delete cascade as participation is required
 
             builder.HasData(SeedData());

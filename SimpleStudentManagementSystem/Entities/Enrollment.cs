@@ -9,7 +9,7 @@ namespace SimpleStudentManagementSystem.Entities
         public int StudentId { get; set; }
         public int CourseId { get; set; }
         public DateOnly EnrollmentDate { get; set; }
-        public decimal? Grade { get; set; }
+        public int? Grade { get; set; }
 
         public Student student { get; set; } = null!;
         public Course course { get; set; } = null!;

@@ -8,11 +8,11 @@ namespace SimpleStudentManagementSystem.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Student> students {  get; set; }
-        public DbSet<Course> courses { get; set; }
+        public DbSet<Student> Students {  get; set; }
+        public DbSet<Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
-        public DbSet<CourseInstructor> courseInstructors { get; set; }
+        public DbSet<CourseInstructor> CourseInstructors { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
