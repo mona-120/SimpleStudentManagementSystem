@@ -25,6 +25,9 @@ namespace SimpleStudentManagementSystem.Services
             if (!validation.IsSuccess)
                 return validation;
 
+            if (await _context.Courses.AnyAsync(c => c.Title == course.Title))
+                return new Result<Course>(false, "Invalid Input, Course Already exist", course);
+
             await _context.Courses.AddAsync(course);
             await _context.SaveChangesAsync();
             return new Result<Course>(true, $"Course {course.Title} Added Successfully!",course);
@@ -34,7 +37,7 @@ namespace SimpleStudentManagementSystem.Services
         // Get Course By Id
         public async Task<Result<Course>> GetCourseById(int id)
         {
-            Course? course = await _context.Courses.FindAsync(id);
+            Course? course = await _context.Courses.AsNoTracking().FirstOrDefaultAsync(c=> c.CourseId == id);
 
             if (course == null)
                 return new Result<Course>(false, $"Course with Id {id} not found!", course);
@@ -54,6 +57,9 @@ namespace SimpleStudentManagementSystem.Services
             var validation = ValidateCourse(course);
             if (!validation.IsSuccess)
                 return validation;
+
+            if(await _context.Courses.AnyAsync(c=> c.Title == course.Title &&  c.CourseId != id))
+                return new Result<Course>(false, "Invalid Input, Course Already exist", course);
 
             _course.Title = course.Title;
             _course.Description = course.Description;
@@ -105,7 +111,8 @@ namespace SimpleStudentManagementSystem.Services
         // Return List of Course
           public async Task<Result<List<Course>>> GetCourseList()
         {
-            List<Course> courses = await _context.Courses.ToListAsync();
+            List<Course> courses = await _context.Courses.AsNoTracking().ToListAsync();
+            // Process of get courses is 'AsNoTracking()' as it doesn't change data and that save memory resources
             return new Result<List<Course>>(true, "Courses retrieved successfully", courses);
         }
     }

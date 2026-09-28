@@ -20,6 +20,9 @@ namespace SimpleStudentManagementSystem.Data.Configrations
                 .HasMaxLength(500)
                 .IsRequired();
 
+            builder.HasIndex(c => c.Title)
+                   .IsUnique();                   // make title unique to avoid dublicates
+
             builder.HasData(SeedData());
         }
 

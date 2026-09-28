@@ -48,7 +48,7 @@ namespace SimpleStudentManagementSystem.Services
         // Get Student by id
         public async Task<Result<Student>> GetStudentByID(int id)
         {
-            Student? student = await context.Students.FindAsync(id);
+            Student? student = await context.Students.AsNoTracking().FirstOrDefaultAsync(s=> s.StudentId == id);
             if (student == null)
             {
                 return new Result<Student>(false, $"System doesn't contain a student with id {id}",student);
@@ -113,7 +113,7 @@ namespace SimpleStudentManagementSystem.Services
         // Get All students
         public async Task<Result<List<Student>>> GetStudentsList()
         {
-            List<Student> students = await context.Students.ToListAsync();
+            List<Student> students = await context.Students.AsNoTracking().ToListAsync();
             return new Result<List<Student>>(true,"Students retrieved successfully",students);  
         }
     }
