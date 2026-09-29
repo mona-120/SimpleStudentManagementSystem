@@ -114,6 +114,9 @@ namespace SimpleStudentManagementSystem.Services
         public async Task<Result<List<Student>>> GetStudentsList()
         {
             List<Student> students = await context.Students.AsNoTracking().ToListAsync();
+            if(students.Count == 0)
+                return new Result<List<Student>>(false, "Students List is empty", []);
+
             return new Result<List<Student>>(true,"Students retrieved successfully",students);  
         }
     }

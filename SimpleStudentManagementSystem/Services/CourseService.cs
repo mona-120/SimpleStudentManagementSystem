@@ -104,7 +104,7 @@ namespace SimpleStudentManagementSystem.Services
             if (course.Description.Length > 500)
                 return new Result<Course>(false, "Invalid input ,Description must be <= 500", course);
 
-            return new Result<Course>(true, "Course is valid!", course);
+            return new Result<Course>(true, null, course);
         }
 
 
@@ -113,6 +113,9 @@ namespace SimpleStudentManagementSystem.Services
         {
             List<Course> courses = await _context.Courses.AsNoTracking().ToListAsync();
             // Process of get courses is 'AsNoTracking()' as it doesn't change data and that save memory resources
+            if( courses.Count == 0 )
+                return new Result<List<Course>>(false, "Course List is empty", []);
+
             return new Result<List<Course>>(true, "Courses retrieved successfully", courses);
         }
     }
