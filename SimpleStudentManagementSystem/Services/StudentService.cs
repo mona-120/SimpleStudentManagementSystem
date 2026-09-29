@@ -110,6 +110,22 @@ namespace SimpleStudentManagementSystem.Services
 
 
 
+        // Get Student by name (partial match)
+        public async Task<Result<List<Student>>> GetStudentByName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return new Result<List<Student>>(false, "Enter the student name", [ ]);
+
+            List<Student> student = await context.Students.Where(s => s.FullName.Contains(name)).AsNoTracking().ToListAsync();
+            
+            if(student.Count == 0)
+                return new Result<List<Student>>(false, "student doesn't exist", []);
+
+            return new Result<List<Student>>(true, $"Found students with matched name {name}", student);
+        }
+
+
+
         // Get All students
         public async Task<Result<List<Student>>> GetStudentsList()
         {

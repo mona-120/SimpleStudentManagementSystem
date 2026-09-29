@@ -46,7 +46,7 @@ namespace SimpleStudentManagementSystem.Services
             if (students.Count == 0)
                 return new Result<List<Enrollment>>(false, "Course doesn't contain students", []);
 
-            return new Result<List<Enrollment>>(true, "Found Courses Students", students);
+            return new Result<List<Enrollment>>(true, "Found Course Students", students);
 
         }
 
@@ -94,6 +94,24 @@ namespace SimpleStudentManagementSystem.Services
             await _context.SaveChangesAsync();
             return new Result<Enrollment>(true, $"Student {_enrollment.StudentId} with course {_enrollment.CourseId} Deleted Successfully", _enrollment);
         }
+
+
+        // Average grades per course
+        public async Task<Result<double?>> CourseAverageGrade(int crId)
+        {
+            bool course = await _context.Enrollments.AnyAsync(e=> e.CourseId == crId);
+            if(!course)
+                return new Result<double?>(false, "Course doesn't have enrollments", null);
+
+            double? Avg = await _context.Enrollments.Where(e=> e.CourseId == crId)
+                                    .AverageAsync(e=> e.Grade);
+
+            if(Avg == null)
+                return new Result<double?>(false, "Students don't receive grades", null);
+
+            return new Result<double?>(true, $"Average Grades for course {crId} = {Avg}", Avg);
+        }
+
 
 
         // Get EnrollmentList
