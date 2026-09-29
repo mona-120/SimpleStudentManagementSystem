@@ -135,5 +135,20 @@ namespace SimpleStudentManagementSystem.Services
 
             return new Result<List<Student>>(true,"Students retrieved successfully",students);  
         }
+
+
+
+        // get students with all their enrollments
+        // using Eager Loading to get all data in one query and avoid N+1 problem ,that occurs as a result of
+        // Lazy Loading as it retrive all student data first then retrive enrollment for each student in a query that repeat N times
+        public async Task<Result<List<Student>>> GetStudentInfo()
+        {
+            List<Student> students = await context.Students.Include(s => s.Enrollments).AsNoTracking().ToListAsync();
+
+            if(students.Count == 0)
+                return new Result<List<Student>>(false, "Students List is empty", []);
+
+            return new Result<List<Student>>(true, "Students retrieved with their enrollments successfully", students);
+        }
     }
 }
