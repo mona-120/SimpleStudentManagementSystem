@@ -22,6 +22,8 @@ namespace SimpleStudentManagementSystem.Data.Configrations
                 .IsUnique();
             builder.Property(s => s.EnrollmentDate).HasDefaultValueSql("Cast(GetDate() AS date)");
 
+            builder.HasQueryFilter(s => s.IsDeleted == false);  // ignore students that are deleted 
+
             builder.HasData(SeedData());
         }
 

@@ -49,6 +49,7 @@ namespace SimpleStudentManagementSystem
                 Console.WriteLine("26. Get Instructors list");
                 Console.WriteLine("27. Get CourseInstructor list");
                 Console.WriteLine("28. Get Student With Enrollment Information");
+                Console.WriteLine("29. Get Deleted Students");
                 Console.WriteLine("0. Exit!");
                 Console.WriteLine("===================================================================================");
 
@@ -56,9 +57,9 @@ namespace SimpleStudentManagementSystem
                 {
                     string input = Console.ReadLine();
                     int? choice = int.TryParse(input, out int value) ? value : null;
-                    if(choice == null || choice < 0 || choice > 28)
+                    if(choice == null || choice < 0 || choice > 29)
                     {
-                        Console.WriteLine("Incorrect choice ,choose from 0 to 28");
+                        Console.WriteLine("Incorrect choice ,choose from 0 to 29");
                     }
 
                     switch(choice)
@@ -380,6 +381,15 @@ namespace SimpleStudentManagementSystem
                             Console.WriteLine(result28.Message);
                             break;
 
+                        case 29:
+                            Console.WriteLine("Deleted Students: ");
+                            var result29 = await studentService.GetDeletedStudents();
+                            foreach(var _student in result29.Data)
+                            {
+                                Console.WriteLine(_student);
+                            }
+                            Console.WriteLine(result29.Message);
+                            break;
                     }
                 }
                 catch(Exception ex) 

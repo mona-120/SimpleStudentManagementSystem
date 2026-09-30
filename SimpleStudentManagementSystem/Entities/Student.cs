@@ -12,6 +12,8 @@ namespace SimpleStudentManagementSystem.Entities
         public DateOnly? DateOfBirth { get; set; } 
         public DateOnly EnrollmentDate { get; set; } 
 
+        public bool IsDeleted { get; set; } = false;
+
         public List<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 
 

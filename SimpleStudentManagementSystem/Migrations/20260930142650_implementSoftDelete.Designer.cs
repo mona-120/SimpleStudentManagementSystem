@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleStudentManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using SimpleStudentManagementSystem.Data;
 namespace SimpleStudentManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260930142650_implementSoftDelete")]
+    partial class implementSoftDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace SimpleStudentManagementSystem.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
 
                     b.HasData(
                         new
@@ -100,7 +103,7 @@ namespace SimpleStudentManagementSystem.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseInstructors", (string)null);
+                    b.ToTable("CourseInstructors");
 
                     b.HasData(
                         new
@@ -150,7 +153,7 @@ namespace SimpleStudentManagementSystem.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Enrollments", (string)null);
+                    b.ToTable("Enrollments");
 
                     b.HasData(
                         new
@@ -203,7 +206,7 @@ namespace SimpleStudentManagementSystem.Migrations
 
                     b.HasKey("InstructorId");
 
-                    b.ToTable("Instructors", (string)null);
+                    b.ToTable("Instructors");
 
                     b.HasData(
                         new
@@ -267,7 +270,7 @@ namespace SimpleStudentManagementSystem.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
 
                     b.HasData(
                         new

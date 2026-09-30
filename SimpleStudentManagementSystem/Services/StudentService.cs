@@ -114,7 +114,8 @@ namespace SimpleStudentManagementSystem.Services
             {
                 return new Result<Student>(false, $"System doesn't contain a student with id {id}", student);
             }
-            context.Students.Remove(student);
+            //context.Students.Remove(student);  // Hard Delete
+            SoftDelete(student);  // Soft Delete
             await context.SaveChangesAsync();
             return new Result<Student>(true, $"Delete Student {student.FullName} with id {id} Successfully", student);
         }
@@ -160,6 +161,26 @@ namespace SimpleStudentManagementSystem.Services
                 return new Result<List<Student>>(false, "Students List is empty", []);
 
             return new Result<List<Student>>(true, "Students retrieved with their enrollments successfully", students);
+        }
+
+
+
+        // Soft Delete method
+        private void SoftDelete(Student student)
+        {
+            student.IsDeleted = true;
+        }
+
+        // Get Deleted Students by ignoring filter
+        public async Task<Result<List<Student>>> GetDeletedStudents()
+        {
+            var res = await context.Students.IgnoreQueryFilters()
+                               .Where(s=> s.IsDeleted == true)
+                               .AsNoTracking().ToListAsync();
+            if(res.Count == 0)
+                return new Result<List<Student>>(false, "No Deleted Students", []);
+
+            return new Result<List<Student>>(true, "Deleted Students Retrieved Successfully!", res);
         }
     }
 }
