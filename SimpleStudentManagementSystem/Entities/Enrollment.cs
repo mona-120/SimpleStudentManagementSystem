@@ -14,6 +14,14 @@ namespace SimpleStudentManagementSystem.Entities
         public Student student { get; set; } = null!;
         public Course course { get; set; } = null!;
 
+
+        public Enrollment() { }
+        public Enrollment(int stId, int crId,int? grade = null)
+        {
+            StudentId = stId;
+            CourseId = crId;
+            Grade = grade;
+        }
         public override string ToString()
         {
             return $"StudentId: {StudentId} - CourseId: {CourseId} - EnrollmentDate: {EnrollmentDate} - Grade: {Grade}";

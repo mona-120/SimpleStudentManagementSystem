@@ -67,28 +67,39 @@ namespace SimpleStudentManagementSystem.Services
                 return new Result<Student>(false, $"System doesn't contain a student with id {id}", st);
             }
 
-            if (string.IsNullOrWhiteSpace(student.FullName))
-                return new Result<Student>(false, "Invalid input ,please enter your name!", student);
+            if (st.FullName != student.FullName)      // Edit condition to check only the changed property
+            {
+                if (string.IsNullOrWhiteSpace(student.FullName))
+                    return new Result<Student>(false, "Invalid input ,please enter your name!", student);
 
-            if (student.FullName.Length > 50)
-                return new Result<Student>(false, "Invalid input ,name must be <= 50", student);
+                if (student.FullName.Length > 50)
+                    return new Result<Student>(false, "Invalid input ,name must be <= 50", student);
 
-            if (string.IsNullOrWhiteSpace(student.Email))
-                return new Result<Student>(false, "Invalid input ,please enter your Email!", student);
+                st.FullName = student.FullName;
+            }
 
-            if (student.Email.Length > 100)
-                return new Result<Student>(false, "Invalid input ,Email must be <= 100", student);
+            if (st.Email != student.Email)
+            {
+                if (string.IsNullOrWhiteSpace(student.Email))
+                    return new Result<Student>(false, "Invalid input ,please enter your Email!", student);
 
-            if (await context.Students.AnyAsync(s => s.Email == student.Email && s.StudentId != id))
-                return new Result<Student>(false, "Invalid input ,Your Email Already exist!", student);
+                if (student.Email.Length > 100)
+                    return new Result<Student>(false, "Invalid input ,Email must be <= 100", student);
 
-            if (student.DateOfBirth != null && student.DateOfBirth > DateOnly.FromDateTime(DateTime.Now))
-                return new Result<Student>(false, "Invalid input ,Your DateOfBirth can't be in the future!", student);
+                if (await context.Students.AnyAsync(s => s.Email == student.Email))
+                    return new Result<Student>(false, "Invalid input ,Your Email Already exist!", student);
 
+                st.Email = student.Email;
+            }
 
-            st.FullName = student.FullName;
-            st.Email = student.Email;
-            st.DateOfBirth = student.DateOfBirth;
+            if (st.DateOfBirth != student.DateOfBirth)
+            {
+                if (student.DateOfBirth != null && student.DateOfBirth > DateOnly.FromDateTime(DateTime.Now))
+                    return new Result<Student>(false, "Invalid input ,Your DateOfBirth can't be in the future!", student);
+
+                st.DateOfBirth = student.DateOfBirth;
+            }
+            
             await context.SaveChangesAsync();
             return new Result<Student>(true, $"Update Student with id {id}, and His data became " +
                 $"{st.FullName} - {st.Email} - {st.DateOfBirth}",student);

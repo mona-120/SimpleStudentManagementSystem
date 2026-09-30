@@ -32,14 +32,17 @@ namespace SimpleStudentManagementSystem.Services
             if (await _context.Enrollments.AnyAsync(e => e.CourseId == enrollment.CourseId && e.StudentId == enrollment.StudentId))
                 return new Result<Enrollment>(false, "Invalid input, Student Already exist", enrollment);
 
+            if (enrollment.Grade != null && (enrollment.Grade < 0 || enrollment.Grade > 100))
+                return new Result<Enrollment>(false, "Grade must be >= 0 OR <= 100", enrollment);
+
             await _context.AddAsync(enrollment);
             await _context.SaveChangesAsync();
-            return new Result<Enrollment>(true, $"Enrollment of {enrollment.StudentId} for Course {enrollment.CourseId} Added Successfully", enrollment);
+            return new Result<Enrollment>(true, $"Enrollment of  student {enrollment.StudentId} for Course {enrollment.CourseId} Added Successfully", enrollment);
         }
 
 
         // Get Enrollment by course id
-        public async Task<Result<List<Enrollment>>> GetEnrollmentByCrsId(int crsId)
+        public async Task<Result<List<Enrollment>>> GetCourseEnrollments(int crsId)
         {
             List<Enrollment> students = await _context.Enrollments.Where(e => e.CourseId == crsId).AsNoTracking().ToListAsync();
 
@@ -51,7 +54,7 @@ namespace SimpleStudentManagementSystem.Services
         }
 
         // Get Enrollment by student id
-        public async Task<Result<List<Enrollment>>> GetEnrollmentByStuId(int stuId)
+        public async Task<Result<List<Enrollment>>> GetStudentEnrollments(int stuId)
         {
             List<Enrollment> courses = await _context.Enrollments.Where(e => e.StudentId == stuId).AsNoTracking().ToListAsync();
 

@@ -11,6 +11,13 @@ namespace SimpleStudentManagementSystem.Entities
 
         public List<CourseInstructor> courses { get; set; } = new List<CourseInstructor>();
 
+
+        public Instructor() { }
+        public Instructor(string name)
+        {
+            FullName = name;
+        }
+
         public override string ToString()
         {
             return $"InstructorId: {InstructorId} - FullName: {FullName}";

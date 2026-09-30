@@ -44,7 +44,7 @@ namespace SimpleStudentManagementSystem.Services
 
 
         // update instructor
-        public async Task<Result<Instructor>> UpdateInstructor(int id,string UpdatedName)
+       /* public async Task<Result<Instructor>> UpdateInstructor(int id,string UpdatedName)
         {
             Instructor? instructor = await _context.Instructors.FindAsync(id);
 
@@ -61,7 +61,7 @@ namespace SimpleStudentManagementSystem.Services
             await _context.SaveChangesAsync();
 
             return new Result<Instructor>(true, $"Instructor with id {id} name updated to be {UpdatedName}", instructor);
-        }
+        }*/
 
 
         // Delete instructor

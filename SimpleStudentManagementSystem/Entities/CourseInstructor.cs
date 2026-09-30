@@ -12,9 +12,17 @@ namespace SimpleStudentManagementSystem.Entities
         public Instructor instructor { get; set; } = null!;
         public Course course { get; set; } = null!;
 
+
+        public CourseInstructor() { }
+        public CourseInstructor(int insId ,int crId)
+        {
+            InstructorId = insId;
+            CourseId = crId;
+        }
+
         public override string ToString()
         {
-            return $"InstructorId: {InstructorId} - {CourseId}";
+            return $"InstructorId: {InstructorId} -  CourseId: {CourseId}";
         }
     }
 }

@@ -14,6 +14,16 @@ namespace SimpleStudentManagementSystem.Entities
         public List<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
         public List<CourseInstructor> instructors { get; set; } = new List<CourseInstructor>();
 
+
+        public Course() { }
+        public Course(string title,int credits,string description)
+        {
+            Title = title;
+            Credits = credits;
+            Description = description;
+        }
+        
+
         public override string ToString()
         {
             return $"CourseID: {CourseId} - Title: {Title} - Credits: {Credits} - Description: {Description}";

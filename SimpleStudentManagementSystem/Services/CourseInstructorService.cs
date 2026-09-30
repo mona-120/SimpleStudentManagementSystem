@@ -48,7 +48,7 @@ namespace SimpleStudentManagementSystem.Services
         }
 
         // get Course Instructors
-        public async Task<Result<List<CourseInstructor>>> GetICoursenstructors(int crId)
+        public async Task<Result<List<CourseInstructor>>> GetCourseInstructors(int crId)
         {
             List<CourseInstructor> Instructors = await _context.CourseInstructors.Where(ci => ci.CourseId == crId)
                            .AsNoTracking().ToListAsync();

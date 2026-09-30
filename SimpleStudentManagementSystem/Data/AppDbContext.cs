@@ -14,6 +14,8 @@ namespace SimpleStudentManagementSystem.Data
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<CourseInstructor> CourseInstructors { get; set; }
 
+
+        public AppDbContext() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

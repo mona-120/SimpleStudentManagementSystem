@@ -20,13 +20,24 @@ namespace SimpleStudentManagementSystem.Services
 
         // Add course
         public async Task<Result<Course>> AddCourse(Course course)
-        { 
-            var validation = ValidateCourse(course);
-            if (!validation.IsSuccess)
-                return validation;
+        {
+            if (string.IsNullOrWhiteSpace(course.Title))
+                return new Result<Course>(false, "Invalid input ,please enter course Title!", course);
+
+            if (course.Title.Length > 50)
+                return new Result<Course>(false, "Invalid input ,Title must be <= 50", course);
 
             if (await _context.Courses.AnyAsync(c => c.Title == course.Title))
                 return new Result<Course>(false, "Invalid Input, Course Already exist", course);
+
+            if (course.Credits < 1)
+                return new Result<Course>(false, "Invalid input, course credits must be >= 1", course);
+
+            if (string.IsNullOrWhiteSpace(course.Description))
+                return new Result<Course>(false, "Invalid input ,please enter Course Description!", course);
+
+            if (course.Description.Length > 500)
+                return new Result<Course>(false, "Invalid input ,Description must be <= 500", course);
 
             await _context.Courses.AddAsync(course);
             await _context.SaveChangesAsync();
@@ -54,12 +65,33 @@ namespace SimpleStudentManagementSystem.Services
             if (_course == null)
                 return new Result<Course>(false, $"Course with Id {id} not found!", _course);
 
-            var validation = ValidateCourse(course);
-            if (!validation.IsSuccess)
-                return validation;
+            if (_course.Title != course.Title)
+            {
+                if (string.IsNullOrWhiteSpace(course.Title))
+                    return new Result<Course>(false, "Invalid input ,please enter course Title!", course);
 
-            if(await _context.Courses.AnyAsync(c=> c.Title == course.Title &&  c.CourseId != id))
-                return new Result<Course>(false, "Invalid Input, Course Already exist", course);
+                if (course.Title.Length > 50)
+                    return new Result<Course>(false, "Invalid input ,Title must be <= 50", course);
+
+                if (await _context.Courses.AnyAsync(c => c.Title == course.Title))
+                    return new Result<Course>(false, "Invalid Input, Course Already exist", course);
+            }
+
+            if (_course.Credits != course.Credits)
+            {
+                if (course.Credits < 1)
+                    return new Result<Course>(false, "Invalid input, course credits must be >= 1", course);
+            }
+
+            if (_course.Description != course.Description)
+            {
+                if (string.IsNullOrWhiteSpace(course.Description))
+                    return new Result<Course>(false, "Invalid input ,please enter Course Description!", course);
+
+                if (course.Description.Length > 500)
+                    return new Result<Course>(false, "Invalid input ,Description must be <= 500", course);
+            }
+
 
             _course.Title = course.Title;
             _course.Description = course.Description;
@@ -85,27 +117,6 @@ namespace SimpleStudentManagementSystem.Services
             return new Result<Course>(true, $"Course {course.Title} Deleted Successfully", course); 
         }
 
-
-        // 
-        private Result<Course> ValidateCourse(Course course)
-        {
-            if (string.IsNullOrWhiteSpace(course.Title))
-                return new Result<Course>(false, "Invalid input ,please enter course Title!", course);
-
-            if (course.Title.Length > 50)
-                return new Result<Course>(false, "Invalid input ,Title must be <= 50", course);
-
-            if (course.Credits < 1)
-                return new Result<Course>(false, "Invalid input, course credits must be >= 1", course);
-
-            if (string.IsNullOrWhiteSpace(course.Description))
-                return new Result<Course>(false, "Invalid input ,please enter Course Description!", course);
-
-            if (course.Description.Length > 500)
-                return new Result<Course>(false, "Invalid input ,Description must be <= 500", course);
-
-            return new Result<Course>(true, null, course);
-        }
 
 
         // Return List of Course
