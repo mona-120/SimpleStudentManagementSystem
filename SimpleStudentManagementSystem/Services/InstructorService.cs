@@ -44,24 +44,26 @@ namespace SimpleStudentManagementSystem.Services
 
 
         // update instructor
-       /* public async Task<Result<Instructor>> UpdateInstructor(int id,string UpdatedName)
+        public async Task<Result<Instructor>> UpdateInstructor(int id,string UpdatedName)
         {
             Instructor? instructor = await _context.Instructors.FindAsync(id);
 
             if (instructor == null)
                 return new Result<Instructor>(false, "Invalid input, Instructor Doesn't Exist", instructor);
 
-            if (string.IsNullOrWhiteSpace(UpdatedName))
-                return new Result<Instructor>(false, "Invalid input, please enter instructor name", instructor);
+                if (string.IsNullOrWhiteSpace(UpdatedName))
+                    return new Result<Instructor>(false, "Invalid input, please enter instructor name", instructor);
 
-            if (UpdatedName.Length > 50)
-                return new Result<Instructor>(false, "Invalid input, Instructor name must be <= 50", instructor);
+                if (UpdatedName.Length > 50)
+                    return new Result<Instructor>(false, "Invalid input, Instructor name must be <= 50", instructor);
 
-            instructor.FullName = UpdatedName;
-            await _context.SaveChangesAsync();
+                if (instructor.FullName == UpdatedName)
+                      return new Result<Instructor>(false, "Name was not updated because it is the same.", instructor);
 
-            return new Result<Instructor>(true, $"Instructor with id {id} name updated to be {UpdatedName}", instructor);
-        }*/
+                instructor.FullName = UpdatedName;
+                await _context.SaveChangesAsync();
+                return new Result<Instructor>(true, $"Instructor with id {id} name updated to be {UpdatedName}", instructor);
+        }
 
 
         // Delete instructor

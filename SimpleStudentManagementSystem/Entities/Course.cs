@@ -12,7 +12,7 @@ namespace SimpleStudentManagementSystem.Entities
         public string Description { get; set; }
 
         public List<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
-        public List<CourseInstructor> instructors { get; set; } = new List<CourseInstructor>();
+        public List<CourseInstructor> Instructors { get; set; } = new List<CourseInstructor>();
 
 
         public Course() { }

@@ -25,7 +25,7 @@ namespace SimpleStudentManagementSystem
                 Console.WriteLine("2. Update Student Information");
                 Console.WriteLine("3. Get Student by Id");
                 Console.WriteLine("4. Get Student by name");
-                Console.WriteLine("5. Delete Student");
+                Console.WriteLine("5. Delete Student Using Hard delete");
                 Console.WriteLine("6. Add new Course");
                 Console.WriteLine("7. Update Course Information");
                 Console.WriteLine("8. Get Course by Id");
@@ -50,16 +50,19 @@ namespace SimpleStudentManagementSystem
                 Console.WriteLine("27. Get CourseInstructor list");
                 Console.WriteLine("28. Get Student With Enrollment Information");
                 Console.WriteLine("29. Get Deleted Students");
+                Console.WriteLine("30. Update Instructor Name");
+                Console.WriteLine("31. Get Enrollment by EnrollmentID(Student Id,Course Id)");
+                Console.WriteLine("32. Delete Student Using Soft delete <That allow return student>");
                 Console.WriteLine("0. Exit!");
                 Console.WriteLine("===================================================================================");
 
                 try
                 {
-                    string input = Console.ReadLine();
+                    string? input = Console.ReadLine();
                     int? choice = int.TryParse(input, out int value) ? value : null;
-                    if(choice == null || choice < 0 || choice > 29)
+                    if(choice == null || choice < 0 || choice > 32)
                     {
-                        Console.WriteLine("Incorrect choice ,choose from 0 to 29");
+                        Console.WriteLine("Incorrect choice ,choose from 0 to 32");
                     }
 
                     switch(choice)
@@ -121,7 +124,7 @@ namespace SimpleStudentManagementSystem
                             Console.Write("Enter student Id: ");
                             var _id = Console.ReadLine();
                             int _stuId = int.TryParse(_id, out int _i) ? _i : -1;
-                            var result5 = await studentService.DeleteStudent(_stuId);
+                            var result5 = await studentService.HardDeleteStudent(_stuId);
                             Console.WriteLine(result5.Message);
                             break;
 
@@ -192,7 +195,7 @@ namespace SimpleStudentManagementSystem
                             var sId_ = int.TryParse(sid_, out int si_) ? si_ : -1;
                             Console.Write("Enter Course Id: ");
                             var cid_ = Console.ReadLine();
-                            var cId_ = int.TryParse(sid_, out int ci_) ? ci_ : -1;
+                            var cId_ = int.TryParse(cid_, out int ci_) ? ci_ : -1;
                             Console.Write("Enter Student Grade: ");
                             var sgrade_ = Console.ReadLine();
                             var sGrade_ = int.TryParse(sgrade_, out int sg_) ? sg_ : -1;
@@ -208,7 +211,7 @@ namespace SimpleStudentManagementSystem
                             var result12 = await enrollmentService.GetStudentEnrollments(studentId);
                             foreach(var stcourse  in result12.Data)
                             {
-                                Console.WriteLine(stcourse);
+                                Console.WriteLine($"{stcourse} | Course Details: {stcourse.Course}");
                             }
                             Console.WriteLine(result12.Message);
                             break;
@@ -220,7 +223,7 @@ namespace SimpleStudentManagementSystem
                             var result13 = await enrollmentService.GetCourseEnrollments(courseId);
                             foreach (var crstu in result13.Data)
                             {
-                                Console.WriteLine(crstu);
+                                Console.WriteLine($"{crstu} | Student Details: {crstu.Student}");
                             }
                             Console.WriteLine(result13.Message);
                             break;
@@ -239,7 +242,7 @@ namespace SimpleStudentManagementSystem
                             var _sId = int.TryParse(_sid, out int _si) ? _si : -1;
                             Console.Write("Enter Course Id: ");
                             var _cid = Console.ReadLine();
-                            var _cId = int.TryParse(_sid, out int _ci) ? _ci : -1;
+                            var _cId = int.TryParse(_cid, out int _ci) ? _ci : -1;
                             var result15 = await enrollmentService.DeleteEnrollment(_sId, _cId);
                             Console.WriteLine(result15.Message);
                             break;
@@ -285,9 +288,9 @@ namespace SimpleStudentManagementSystem
                             var courid_ = Console.ReadLine();
                             var courId_ = int.TryParse(courid_, out int corId_) ? corId_ : -1;
                             var result20 = await courseInstructorService.GetCourseInstructors(courId_);
-                            foreach(var ins in result20.Data)
+                            foreach(var inst in result20.Data)
                             {
-                                Console.WriteLine(ins);
+                                Console.WriteLine(inst);
                             }
                             Console.WriteLine(result20.Message);
                             break;
@@ -389,6 +392,38 @@ namespace SimpleStudentManagementSystem
                                 Console.WriteLine(_student);
                             }
                             Console.WriteLine(result29.Message);
+                            break;
+
+                        case 30:
+                            Console.Write("Enter Instructor Id: ");
+                            var insID = Console.ReadLine();
+                            int insID_ = int.TryParse(insID, out int ins) ? ins : -1;
+                            Console.Write("Enter New Name: ");
+                            var newName = Console.ReadLine();
+                            var result30 = await instructorService.UpdateInstructor(insID_, newName);
+                            Console.WriteLine(result30.Message);
+                            break;
+
+                        case 31:
+                            Console.Write("Enter Student Id: ");
+                            var Studentid = Console.ReadLine();
+                            int StudentId = int.TryParse(Studentid, out int Student) ? Student : -1;
+                            Console.Write("Enter Course Id: ");
+                            var Courseid = Console.ReadLine();
+                            int CoursetId = int.TryParse(Courseid, out int Course) ? Course : -1;
+                            var result31 = await enrollmentService.GetEnrollmentByID(StudentId, CoursetId);
+                            Console.WriteLine(result31.Message);
+                            if (result31.IsSuccess && result31.Data != null)
+                                Console.WriteLine($"Enrollment Details: {result31.Data} | Student Details: {result31.Data.Student} Course Details: | {result31.Data.Course}");
+                            Console.WriteLine(result31.Message);
+                            break;
+
+                        case 32:
+                            Console.Write("Enter student Id: ");
+                            var _Id = Console.ReadLine();
+                            int _StuId = int.TryParse(_Id, out int _I) ? _I : -1;
+                            var result32 = await studentService.SoftDeleteStudent(_StuId);
+                            Console.WriteLine(result32.Message);
                             break;
                     }
                 }

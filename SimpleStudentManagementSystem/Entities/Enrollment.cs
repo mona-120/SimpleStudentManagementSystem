@@ -11,8 +11,8 @@ namespace SimpleStudentManagementSystem.Entities
         public DateOnly EnrollmentDate { get; set; }
         public int? Grade { get; set; }
 
-        public Student student { get; set; } = null!;
-        public Course course { get; set; } = null!;
+        public Student Student { get; set; } = null!;
+        public Course Course { get; set; } = null!;
 
 
         public Enrollment() { }

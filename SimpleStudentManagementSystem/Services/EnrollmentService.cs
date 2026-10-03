@@ -44,7 +44,8 @@ namespace SimpleStudentManagementSystem.Services
         // Get Enrollment by course id
         public async Task<Result<List<Enrollment>>> GetCourseEnrollments(int crsId)
         {
-            List<Enrollment> students = await _context.Enrollments.Where(e => e.CourseId == crsId).AsNoTracking().ToListAsync();
+            List<Enrollment> students = await _context.Enrollments.Where(e => e.CourseId == crsId)
+                                       .Include(e=> e.Student).AsNoTracking().ToListAsync();
 
             if (students.Count == 0)
                 return new Result<List<Enrollment>>(false, "Course doesn't contain students", []);
@@ -56,13 +57,27 @@ namespace SimpleStudentManagementSystem.Services
         // Get Enrollment by student id
         public async Task<Result<List<Enrollment>>> GetStudentEnrollments(int stuId)
         {
-            List<Enrollment> courses = await _context.Enrollments.Where(e => e.StudentId == stuId).AsNoTracking().ToListAsync();
+            List<Enrollment> courses = await _context.Enrollments.Where(e => e.StudentId == stuId)
+                                        .Include(e=> e.Course).AsNoTracking().ToListAsync();
 
             if (courses.Count == 0)
                 return new Result<List<Enrollment>>(false, "Student doesn't have courses", []);
 
             return new Result<List<Enrollment>>(true, "Found Student Courses", courses);
 
+        }
+
+
+        // Get Enrollment by ID
+        public async Task<Result<Enrollment>> GetEnrollmentByID(int StudentId, int courseId)
+        {
+            var enrollment = await _context.Enrollments
+                                         .Include(e=> e.Student).Include(e=> e.Course).AsNoTracking()
+                                         .FirstOrDefaultAsync(e=> e.StudentId == StudentId  && e.CourseId == courseId);
+            if (enrollment == null)
+                return new Result<Enrollment>(false, "Enrollment Doesn't Exist", null);
+
+            return new Result<Enrollment>(true, "Enrollment Found", enrollment);
         }
 
 

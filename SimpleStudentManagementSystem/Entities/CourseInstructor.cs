@@ -9,8 +9,8 @@ namespace SimpleStudentManagementSystem.Entities
         public int InstructorId { get; set; }
         public int CourseId { get; set; }
 
-        public Instructor instructor { get; set; } = null!;
-        public Course course { get; set; } = null!;
+        public Instructor Instructor { get; set; } = null!;
+        public Course Course { get; set; } = null!;
 
 
         public CourseInstructor() { }

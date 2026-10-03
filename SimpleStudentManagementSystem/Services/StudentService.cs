@@ -106,18 +106,32 @@ namespace SimpleStudentManagementSystem.Services
         }
 
 
-        // Delete a student
-        public async Task<Result<Student>> DeleteStudent(int id)
+        // Delete a student using Hard Delete 
+        public async Task<Result<Student>> HardDeleteStudent(int id)
         {
             Student? student = await context.Students.FindAsync(id);
             if (student == null)
             {
                 return new Result<Student>(false, $"System doesn't contain a student with id {id}", student);
             }
-            //context.Students.Remove(student);  // Hard Delete
-            SoftDelete(student);  // Soft Delete
+            context.Students.Remove(student);  // Hard Delete
             await context.SaveChangesAsync();
-            return new Result<Student>(true, $"Delete Student {student.FullName} with id {id} Successfully", student);
+            return new Result<Student>(true, $"Delete Student {student.FullName} with id {id} Successfully using Hard Delete", student);
+        }
+
+        // Delete Student using Soft Delete
+        public async Task<Result<Student>> SoftDeleteStudent(int id)
+        {
+            Student? student = await context.Students.FindAsync(id);
+            if (student == null)
+            {
+                return new Result<Student>(false, $"System doesn't contain a student with id {id}", student);
+            }
+            if (student.IsDeleted)
+                return new Result<Student>(false, "Student already Soft-Deleted", student);
+            SoftDelete(student);  // Soft Delete  
+            await context.SaveChangesAsync();
+            return new Result<Student>(true, $"Delete Student {student.FullName} with id {id} Successfully using soft Delete", student);
         }
 
 

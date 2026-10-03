@@ -15,13 +15,13 @@ namespace SimpleStudentManagementSystem.Data.Configrations
             builder.Property(e => e.EnrollmentDate)
                 .HasDefaultValueSql("Cast (GetDate() As date)");
 
-            builder.HasOne(e => e.course)
+            builder.HasOne(e => e.Course)
                 .WithMany(c => c.Enrollments)
                 .HasForeignKey(e => e.CourseId)
                 .IsRequired()   // total participation from enrollment where dependent(CourseID) can't exist without parent(course)
                 .OnDelete(DeleteBehavior.Restrict); // can't dalete course enrollment if course deleted, as it may related with a student
 
-            builder.HasOne(e => e.student)
+            builder.HasOne(e => e.Student)
                  .WithMany(s => s.Enrollments)
                  .HasForeignKey(e => e.StudentId)
                  .IsRequired()

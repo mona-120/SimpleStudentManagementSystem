@@ -13,14 +13,14 @@ namespace SimpleStudentManagementSystem.Data.Configrations
         {
             builder.HasKey(ci => new {ci.InstructorId, ci.CourseId});
 
-            builder.HasOne(ci => ci.instructor)
-                .WithMany(i => i.courses)
+            builder.HasOne(ci => ci.Instructor)
+                .WithMany(i => i.Courses)
                 .HasForeignKey(ci => ci.InstructorId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);  // if delete instructor, we should delete record in CourseInstructor
 
-            builder.HasOne(ci => ci.course)
-                .WithMany(c => c.instructors)
+            builder.HasOne(ci => ci.Course)
+                .WithMany(c => c.Instructors)
                 .HasForeignKey(ci => ci.CourseId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
